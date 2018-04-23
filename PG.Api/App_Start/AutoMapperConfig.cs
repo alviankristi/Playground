@@ -16,7 +16,10 @@ namespace PG.Api
                 config.CreateMap<SiteDto, Site>().ReverseMap();
 
                 config.CreateMap<NewFacilityDto, Facility>()
-                    .ForMember(d => d.Location, opt => opt.MapFrom(s => DbGeography.FromText(s.Location.AsText())));
+                    .ForMember(dest => dest.Location, opt => opt.MapFrom(src => DbGeography.FromText(src.Location.AsText())));
+                config.CreateMap<EditFacilityDto, Facility>()
+                    .ForMember(dest => dest.Location,
+                        opt => opt.MapFrom(src => DbGeography.FromText(src.Location.AsText())));
                 config.CreateMap<FacilityDto, Facility>().ReverseMap();
             });
         }

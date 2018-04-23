@@ -86,7 +86,7 @@ namespace PG.Api.Controllers
             var createdDto = new FacilityDto();
             createdDto.LoadFromEntity(facility);
 
-            return CreatedAtRoute("GetFacilityById", new {facilityId}, createdDto);
+            return CreatedAtRoute("GetFacilityById", new {id = facilityId}, createdDto);
         }
 
         [Route("{id}/RemoveFacility/{facilityId}"), HttpDelete]

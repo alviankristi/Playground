@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using AutoMapper;
 using PG.Model;
 
 namespace PG.Api.DtoModels
@@ -11,7 +8,7 @@ namespace PG.Api.DtoModels
     {
         public virtual TEntity ToEntity()
         {
-            return new TEntity();
+            return Mapper.Map<TEntity>(this);
         }
     }
 
@@ -22,7 +19,11 @@ namespace PG.Api.DtoModels
 
         public virtual TEntity ToEntity(TEntity originalEntity)
         {
-            return originalEntity;
+            var updatedEntity = originalEntity;
+
+            Mapper.Map(this, updatedEntity);
+
+            return updatedEntity;
         }
 
         public virtual void LoadFromEntity(TEntity entity)

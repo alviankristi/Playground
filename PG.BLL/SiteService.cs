@@ -26,7 +26,8 @@ namespace PG.BLL
         {
             return _facilityRepository.Filter(pageIndex, pageSize,
                 new OrderBySelector<Facility, string>(OrderByType.Ascending, facility => facility.Name),
-                facility => facility.SiteId == siteId);
+                facility => facility.SiteId == siteId,
+                facility => facility.Site);
         }
 
         public int AddFacility(int siteId, Facility newFacility)
