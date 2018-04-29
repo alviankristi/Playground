@@ -5,6 +5,7 @@ using PG.DataAccess;
 using PG.Repository;
 using System.Reflection;
 using System.Web.Http;
+using PG.Repository.Cache;
 
 namespace PG.Api
 {
@@ -25,6 +26,9 @@ namespace PG.Api
         private static IContainer RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterInstance(new PlaygroundDbContext()).As<IPlaygroundDbContext>();
+
+            if (ApplicationSetting.EnableCache)
+                builder.RegisterInstance(new RedisCacheService(ApplicationSetting.CacheConnection)).As<ICacheService>();
 
             builder.RegisterType<FacilityRepository>().As<IFacilityRepository>().InstancePerRequest();
             builder.RegisterType<SiteRepository>().As<ISiteRepository>().InstancePerRequest();

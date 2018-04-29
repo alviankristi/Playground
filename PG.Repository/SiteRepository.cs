@@ -1,5 +1,6 @@
 ﻿using PG.DataAccess;
 using PG.Model;
+using PG.Repository.Cache;
 
 namespace PG.Repository
 {
@@ -7,6 +8,12 @@ namespace PG.Repository
     {
         public SiteRepository(IPlaygroundDbContext dbContext)
             : base(dbContext)
+        {
+
+        }
+
+        public SiteRepository(IPlaygroundDbContext dbContext, ICacheService cacheService)
+            : base(dbContext, cacheService)
         {
 
         }

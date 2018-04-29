@@ -7,16 +7,27 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
+using PG.Repository.Cache;
 
 namespace PG.Repository
 {
     public abstract class BaseRepository<TEntity> where TEntity: BaseModel
     {
         protected IPlaygroundDbContext Db;
+        protected ICacheService Cache;
+
+        protected virtual string SingleCacheKeyPrefix => typeof(TEntity).FullName?.Replace(".", ":");
 
         protected BaseRepository(IPlaygroundDbContext dbContext)
         {
             Db = dbContext;
+        }
+
+        protected BaseRepository(IPlaygroundDbContext dbContext, ICacheService cacheService)
+        {
+            Db = dbContext;
+            Cache = cacheService;
         }
 
         public virtual int Create(TEntity newEntity)
@@ -26,7 +37,11 @@ namespace PG.Repository
             
             Db.SaveChanges();
 
-            return newEntity.Id;
+            var id = newEntity.Id;
+
+            Cache?.Add($"{SingleCacheKeyPrefix}:{id}", JsonConvert.SerializeObject(newEntity));
+
+            return id;
         }
 
         public virtual void Delete(int id)
@@ -36,6 +51,8 @@ namespace PG.Repository
             {
                 Db.Entry(entity).State = EntityState.Deleted;
                 Db.SaveChanges();
+
+                Cache?.Delete($"{SingleCacheKeyPrefix}:{id}");
             }
         }
 
@@ -58,7 +75,21 @@ namespace PG.Repository
 
         public virtual TEntity Get(int id)
         {
-            return Db.Set<TEntity>().Find(id);
+            TEntity entity;
+
+            var cachedEntity = Cache?.Get($"{SingleCacheKeyPrefix}:{id}");
+            if (string.IsNullOrEmpty(cachedEntity))
+            {
+                entity = Db.Set<TEntity>().Find(id);
+
+                Cache?.Add($"{SingleCacheKeyPrefix}:{id}", JsonConvert.SerializeObject(entity));
+            }
+            else
+            {
+                entity = JsonConvert.DeserializeObject<TEntity>(cachedEntity);
+            }
+            
+            return entity;
         }
 
         public virtual TEntity Get(int id, params Expression<Func<TEntity, object>>[] includeProperties)
@@ -76,6 +107,8 @@ namespace PG.Repository
             dbEntity.State = EntityState.Modified;
 
             Db.SaveChanges();
+
+            Cache?.Delete($"{SingleCacheKeyPrefix}:{updatedEntity.Id}");
         }
 
         private DbEntityEntry<TEntity> GetEntity(TEntity entity)
