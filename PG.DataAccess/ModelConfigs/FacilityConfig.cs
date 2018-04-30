@@ -1,14 +1,13 @@
 ﻿using PG.Model;
-using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration;
 
 namespace PG.DataAccess.ModelConfigs
 {
-    public static class FacilityConfig
+    public class FacilityConfig : EntityTypeConfiguration<Facility>
     {
-        public static void Configure(DbModelBuilder modelBuilder)
+        public FacilityConfig()
         {
-            modelBuilder.Entity<Facility>()
-                .HasRequired(facility => facility.Site)
+            HasRequired(facility => facility.Site)
                 .WithMany(site => site.Facilities)
                 .HasForeignKey(facility => facility.SiteId);
         }

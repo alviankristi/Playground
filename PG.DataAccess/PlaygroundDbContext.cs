@@ -17,11 +17,13 @@ namespace PG.DataAccess
             
         }
 
+        public DbSet<Facility> Facilities { get; set; }
         public DbSet<Site> Sites { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            FacilityConfig.Configure(modelBuilder);
+            modelBuilder.Configurations.Add(new FacilityConfig());
+            modelBuilder.Configurations.Add(new SiteConfig());
         }
     }
 }

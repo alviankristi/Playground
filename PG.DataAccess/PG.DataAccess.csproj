@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelConfigs\FacilityConfig.cs" />
+    <Compile Include="ModelConfigs\SiteConfig.cs" />
     <Compile Include="PlaygroundDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
