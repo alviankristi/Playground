@@ -132,11 +132,13 @@
   <ItemGroup>
     <Compile Include="ApplicationSetting.cs" />
     <Compile Include="App_Start\DIConfig\AutofacConfig.cs" />
-    <Compile Include="App_Start\AutoMapperConfig.cs" />
+    <Compile Include="App_Start\MapperConfig\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DIConfig\RepositoryConfig.cs" />
     <Compile Include="App_Start\DIConfig\ServiceConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\MapperConfig\FacilityMappingProfile.cs" />
+    <Compile Include="App_Start\MapperConfig\SiteMappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
