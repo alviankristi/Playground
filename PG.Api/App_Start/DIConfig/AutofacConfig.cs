@@ -1,11 +1,8 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
-using PG.BLL;
 using PG.DataAccess;
-using PG.Repository;
 using System.Reflection;
 using System.Web.Http;
-using PG.Repository.Cache;
 
 namespace PG.Api
 {
@@ -26,15 +23,10 @@ namespace PG.Api
         private static IContainer RegisterServices(ContainerBuilder builder)
         {
             builder.RegisterInstance(new PlaygroundDbContext()).As<IPlaygroundDbContext>();
+            
+            RepositoryConfig.Register(builder);
 
-            if (ApplicationSetting.EnableCache)
-                builder.RegisterInstance(new RedisCacheService(ApplicationSetting.CacheConnection)).As<ICacheService>();
-
-            builder.RegisterType<FacilityRepository>().As<IFacilityRepository>().InstancePerRequest();
-            builder.RegisterType<SiteRepository>().As<ISiteRepository>().InstancePerRequest();
-
-            builder.RegisterType<FacilityService>().As<IFacilityService>().InstancePerRequest();
-            builder.RegisterType<SiteService>().As<ISiteService>().InstancePerRequest();
+            ServiceConfig.Register(builder);
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
