@@ -1,5 +1,6 @@
 ﻿using PG.Api.DtoModels;
 using PG.BLL;
+using PG.Common;
 using PG.Model;
 using System.Net;
 using System.Web.Http;
@@ -14,10 +15,18 @@ namespace PG.Api.Controllers
         where TService : IService<TEntity>
     {
         protected TService Svc;
+        protected ILogger Logger;
 
         protected BaseController(TService service)
         {
             Svc = service;
+            Logger = LoggerManager.GetLogger();
+        }
+
+        protected BaseController(TService service, ILogger logger)
+        {
+            Svc = service;
+            Logger = logger;
         }
         
         public virtual IHttpActionResult Get(int id)
@@ -28,7 +37,7 @@ namespace PG.Api.Controllers
 
             var item = new TDto();
             item.LoadFromEntity(entity);
-
+            
             return Ok(item);
         }
         

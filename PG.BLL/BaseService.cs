@@ -1,4 +1,5 @@
-﻿using PG.Model;
+﻿using PG.Common;
+using PG.Model;
 using PG.Repository;
 using System;
 
@@ -9,10 +10,18 @@ namespace PG.BLL
         where TRepository: IRepository<TEntity>
     {
         protected TRepository Repo;
+        protected ILogger Logger;
 
         protected BaseService(TRepository repository)
         {
             Repo = repository;
+            Logger = LoggerManager.GetLogger();
+        }
+
+        protected BaseService(TRepository repository, ILogger logger)
+        {
+            Repo = repository;
+            Logger = logger;
         }
 
         public virtual int Create(TEntity newEntity)

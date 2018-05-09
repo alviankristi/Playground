@@ -1,14 +1,14 @@
-﻿using PG.Common;
+﻿using Newtonsoft.Json;
+using PG.Common;
 using PG.Common.Extensions;
 using PG.DataAccess;
 using PG.Model;
+using PG.Repository.Cache;
 using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
-using Newtonsoft.Json;
-using PG.Repository.Cache;
 
 namespace PG.Repository
 {
@@ -16,18 +16,28 @@ namespace PG.Repository
     {
         protected IPlaygroundDbContext Db;
         protected ICacheService Cache;
+        protected ILogger Logger;
 
         protected virtual string SingleCacheKeyPrefix => typeof(TEntity).FullName?.Replace(".", ":");
 
         protected BaseRepository(IPlaygroundDbContext dbContext)
         {
             Db = dbContext;
+            Logger = LoggerManager.GetLogger();
         }
 
         protected BaseRepository(IPlaygroundDbContext dbContext, ICacheService cacheService)
         {
             Db = dbContext;
             Cache = cacheService;
+            Logger = LoggerManager.GetLogger();
+        }
+
+        protected BaseRepository(IPlaygroundDbContext dbContext, ICacheService cacheService, ILogger logger)
+        {
+            Db = dbContext;
+            Cache = cacheService;
+            Logger = logger;
         }
 
         public virtual int Create(TEntity newEntity)
