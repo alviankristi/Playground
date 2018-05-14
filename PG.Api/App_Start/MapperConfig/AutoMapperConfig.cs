@@ -10,6 +10,7 @@ namespace PG.Api
             {
                 config.AddProfile<FacilityMappingProfile>();
                 config.AddProfile<SiteMappingProfile>();
+                config.AddProfile<UserProfileMappingProfile>();
             });
         }
     }

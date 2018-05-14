@@ -9,6 +9,7 @@ namespace PG.Api
         {
             builder.RegisterType<FacilityService>().As<IFacilityService>().InstancePerRequest();
             builder.RegisterType<SiteService>().As<ISiteService>().InstancePerRequest();
+            builder.RegisterType<UserProfileService>().As<IUserProfileService>().InstancePerRequest();
         }
     }
 }

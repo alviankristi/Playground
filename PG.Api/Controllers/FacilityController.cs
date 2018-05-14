@@ -18,18 +18,21 @@ namespace PG.Api.Controllers
             return base.Get(id);
         }
 
+        [Authorize]
         [Route("")]
         public override IHttpActionResult Post([FromBody] NewFacilityDto value)
         {
             return base.Post(value);
         }
 
+        [Authorize]
         [Route("{id}")]
         public override IHttpActionResult Put(int id, [FromBody] EditFacilityDto value)
         {
             return base.Put(id, value);
         }
 
+        [Authorize]
         [Route("{id}")]
         public override IHttpActionResult Delete(int id)
         {

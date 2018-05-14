@@ -23,18 +23,21 @@ namespace PG.Api.Controllers
             return base.Get(id);
         }
 
+        [Authorize]
         [Route("")]
         public override IHttpActionResult Post([FromBody] NewSiteDto value)
         {
             return base.Post(value);
         }
 
+        [Authorize]
         [Route("{id}")]
         public override IHttpActionResult Put(int id, [FromBody] EditSiteDto value)
         {
             return base.Put(id, value);
         }
 
+        [Authorize]
         [Route("{id}")]
         public override IHttpActionResult Delete(int id)
         {
@@ -73,6 +76,7 @@ namespace PG.Api.Controllers
             return Json(new PagedList<FacilityDto>(source, list.PageIndex, list.PageSize, list.TotalCount));
         }
 
+        [Authorize]
         [Route("{id}/AddFacility"), HttpPost]
         public IHttpActionResult AddFacility(int id, [FromBody] NewFacilityDto value)
         {
@@ -89,6 +93,7 @@ namespace PG.Api.Controllers
             return CreatedAtRoute("GetFacilityById", new {id = facilityId}, createdDto);
         }
 
+        [Authorize]
         [Route("{id}/RemoveFacility/{facilityId}"), HttpDelete]
         public IHttpActionResult RemoveFacility(int id, int facilityId)
         {

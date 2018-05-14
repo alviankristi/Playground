@@ -13,6 +13,7 @@ namespace PG.Api
 
             builder.RegisterType<FacilityRepository>().As<IFacilityRepository>().InstancePerRequest();
             builder.RegisterType<SiteRepository>().As<ISiteRepository>().InstancePerRequest();
+            builder.RegisterType<UserProfileRepository>().As<IUserProfileRepository>().InstancePerRequest();
         }
     }
 }
