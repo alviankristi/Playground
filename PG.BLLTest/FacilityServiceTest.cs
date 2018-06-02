@@ -52,7 +52,7 @@ namespace PG.BLLTest
             //assert
             Assert.IsNotNull(model.Created);
             Assert.IsNotNull(model.Id);
-            Assert.IsNotNull(_data.Count == 2);
+            Assert.IsTrue(_data.Count == 2);
         }
 
         [TestMethod]
@@ -76,9 +76,10 @@ namespace PG.BLLTest
             //act
             var service = new FacilityService(_facilityRepository.Object);
             service.Update(model);
-            var updatedData = _data.FirstOrDefault(a => a.Id == model.Id);
+            var updatedData = _data.First(a => a.Id == model.Id);
 
             //assert
+            Assert.IsNotNull(updatedData);
             Assert.AreEqual(updatedData.Name, model.Name);
         }
 
@@ -113,6 +114,7 @@ namespace PG.BLLTest
             var model = service.GetById(1);
 
             //assert
+            Assert.IsNotNull(model);
             Assert.AreEqual(model.Id, 1);
         }
     }
