@@ -14,16 +14,16 @@ namespace PG.BLLTest
     public class FacilityServiceTest
     {
         //All method should be test at least once
-        List<Facility> data;
-        Mock<IFacilityRepository> facilityRepository;
+        private List<Facility> _data;
+        private Mock<IFacilityRepository> _facilityRepository;
 
         [TestInitialize]
         public void Setup()
         {
-            facilityRepository = new Mock<IFacilityRepository>();
-            facilityRepository.Setup(a => a.Get(It.IsAny<int>())).Returns((int a) => data.FirstOrDefault(ab => ab.Id == a));
+            _facilityRepository = new Mock<IFacilityRepository>();
+            _facilityRepository.Setup(a => a.Get(It.IsAny<int>())).Returns((int a) => _data.FirstOrDefault(ab => ab.Id == a));
 
-            data = new List<Facility>
+            _data = new List<Facility>
             {
                 new Facility
                 {
@@ -38,21 +38,21 @@ namespace PG.BLLTest
         {
 
             //arrange
-            facilityRepository.Setup(a => a.Create(It.IsAny<Facility>())).Returns(2).Callback((Facility c) =>
+            _facilityRepository.Setup(a => a.Create(It.IsAny<Facility>())).Returns(2).Callback((Facility c) =>
             {
-                c.Id = data.Count + 1;
-                data.Add(c);
+                c.Id = _data.Count + 1;
+                _data.Add(c);
             });
             var model = new Facility();
 
             //act
-            var service = new FacilityService(facilityRepository.Object);
+            var service = new FacilityService(_facilityRepository.Object);
             service.Create(model);
 
             //assert
             Assert.IsNotNull(model.Created);
             Assert.IsNotNull(model.Id);
-            Assert.IsNotNull(data.Count == 2);
+            Assert.IsNotNull(_data.Count == 2);
         }
 
         [TestMethod]
@@ -60,11 +60,11 @@ namespace PG.BLLTest
         {
 
             //arrange
-            facilityRepository.Setup(a => a.Update(It.IsAny<Facility>())).Callback((Facility c) =>
+            _facilityRepository.Setup(a => a.Update(It.IsAny<Facility>())).Callback((Facility c) =>
             {
-                var getData = data.FirstOrDefault(a => a.Id == c.Id);
-                data.Remove(getData);
-                data.Add(c);
+                var getData = _data.FirstOrDefault(a => a.Id == c.Id);
+                _data.Remove(getData);
+                _data.Add(c);
             });
             var model = new Facility()
             {
@@ -74,9 +74,9 @@ namespace PG.BLLTest
             };
 
             //act
-            var service = new FacilityService(facilityRepository.Object);
+            var service = new FacilityService(_facilityRepository.Object);
             service.Update(model);
-            var updatedData = data.FirstOrDefault(a => a.Id == model.Id);
+            var updatedData = _data.FirstOrDefault(a => a.Id == model.Id);
 
             //assert
             Assert.AreEqual(updatedData.Name, model.Name);
@@ -87,19 +87,18 @@ namespace PG.BLLTest
         {
 
             //arrange
-            facilityRepository.Setup(a => a.Delete(It.IsAny<int>())).Callback((int c) =>
+            _facilityRepository.Setup(a => a.Delete(It.IsAny<int>())).Callback((int c) =>
             {
-                var deleteddata = data.FirstOrDefault(a => a.Id == c);
-                data.Remove(deleteddata);
+                var deleteddata = _data.First(a => a.Id == c);
+                _data.Remove(deleteddata);
             });
-            var model = new Facility();
 
             //act
-            var service = new FacilityService(facilityRepository.Object);
+            var service = new FacilityService(_facilityRepository.Object);
             service.Delete(1);
 
             //assert
-            Assert.IsTrue(data.Count == 0);
+            Assert.IsTrue(_data.Count == 0);
         }
 
         [TestMethod]
@@ -107,10 +106,10 @@ namespace PG.BLLTest
         {
 
             //arrange
-            facilityRepository.Setup(a => a.Get(It.IsAny<int>(), It.IsAny<Expression<Func<Facility, object>>[]>())).Returns((int a, Expression<Func<Facility, object>>[] expressions) => data.FirstOrDefault(ab => ab.Id == a));
+            _facilityRepository.Setup(a => a.Get(It.IsAny<int>(), It.IsAny<Expression<Func<Facility, object>>[]>())).Returns((int a, Expression<Func<Facility, object>>[] expressions) => _data.FirstOrDefault(ab => ab.Id == a));
 
             //act
-            var service = new FacilityService(facilityRepository.Object);
+            var service = new FacilityService(_facilityRepository.Object);
             var model = service.GetById(1);
 
             //assert

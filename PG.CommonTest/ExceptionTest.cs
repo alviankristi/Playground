@@ -7,8 +7,8 @@ namespace PG.CommonTest
     [TestClass]
     public class ExceptionTest
     {
-        public const string InnerExceptionMessage = "Inner Exception";
-        public const string ExceptionMessage = "Exception Message";
+        private const string InnerExceptionMessage = "Inner Exception";
+        private const string ExceptionMessage = "Exception Message";
 
         [TestMethod]
         public void GetLastInnerExceptionMessage_ReturnInnerException()
